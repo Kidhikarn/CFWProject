@@ -24,6 +24,13 @@ public class SceneChange : MonoBehaviour
 
     public void GoToTitle()
     {
+        GameObject databa;
+        databa = GameObject.Find("DataBank");
+        if (databa != null)
+        {
+            Destroy(databa);
+        }
         SceneManager.LoadScene("Title");
+
     }
 }
