@@ -79,7 +79,6 @@ public class TitleScreen : MonoBehaviour
                     StartCoroutine(Login());
                     break;
             }
-            
         }
         else
         {
@@ -91,8 +90,6 @@ public class TitleScreen : MonoBehaviour
             usrWrnTxt.SetActive(true);
             usrWrnTxt.GetComponent<Text>().text = "Enter username please!";
         }
-
-
     }
 
     IEnumerator Login()

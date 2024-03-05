@@ -56,7 +56,7 @@ public class LevelManager : MonoBehaviour
         subtopicking = false;
         subjectsAdded = true;
 
-        StartCoroutine(GetClassEnrolment());
+        StartCoroutine(GetSubjectClassEnrolment());
     }
 
     // Update is called once per frame
@@ -87,15 +87,14 @@ public class LevelManager : MonoBehaviour
 
     // Get class enrolment id, if more than 1, immediately set text to multiple classes.
     // Step 1
-    IEnumerator GetClassEnrolment()
+    IEnumerator GetSubjectClassEnrolment()
     {
-        string[] rawArray;
         // get user ID from databa
         string userID = databa.dataDict["userID"];
         Debug.Log("user ID extracted: " + userID);
 
         string uri = "http://localhost:8080/KidsTest/php/";
-        string php = "GetClassEnrolment.php";
+        string php = "GetSubjectClassEnrolment.php";
         WWWForm form = new WWWForm();
         form.AddField("userID", userID);
 
@@ -111,26 +110,19 @@ public class LevelManager : MonoBehaviour
             {
                 //Debug.Log("Form upload complete!");
                 string rawData = www.downloadHandler.text;
-                //Debug.Log("Result: " + rawData);
-                rawArray = rawData.Split('`');
-                if (rawData.Length > 2)
-                {
-                    classTxt.text = "Multiple Classes";
-                }
-                else
-                {
-                    StartCoroutine(GetClass(rawArray[0]));
-                }
-                StartCoroutine(GetSubjectEnrolment());
+                Debug.Log("Result: " + rawData);
+                StartCoroutine(GetSubjectClass(rawData));
+                
             }
         }
     }
 
     // Step 2
-    IEnumerator GetClass(string classID)
+    IEnumerator GetSubjectClass(string classID)
     {
+        string[] rawArray;
         string uri = "http://localhost:8080/KidsTest/php/";
-        string php = "GetClass.php";
+        string php = "GetSubjectClass.php";
         WWWForm form = new WWWForm();
         form.AddField("classID", classID);
 
@@ -146,55 +138,12 @@ public class LevelManager : MonoBehaviour
             {
                 //Debug.Log("Form upload complete!");
                 string rawData = www.downloadHandler.text;
-                //Debug.Log("Result: " + rawData);
-                classTxt.text = rawData;
-
-            }
-        }
-    }
-
-    // Step 3
-    IEnumerator GetSubjectEnrolment()
-    {
-        string[] rawArray;
-        string userID = databa.dataDict["userID"];
-        string uri = "http://localhost:8080/KidsTest/php/";
-        string php = "GetSubjectEnrolment.php";
-        WWWForm form = new WWWForm();
-        form.AddField("userID", userID);
-
-        using (UnityWebRequest www = UnityWebRequest.Post(uri + php, form))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.isNetworkError || www.isHttpError)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                //Debug.Log("Form upload complete!");
-                string rawData = www.downloadHandler.text;
-                //Debug.Log("Result: " + rawData);
+                Debug.Log("Result: " + rawData);
                 rawArray = rawData.Split('`');
+                classTxt.text = rawArray[0];
+                StartCoroutine(GetSubject(rawArray[1]));
 
-                if (rawArray.Length > 2)
-                {
-                    //Debug.Log("Multiple subjects available!");
-                    foreach (string ele in rawArray)
-                    {
-                        if (ele != "")
-                        {
-                            Debug.Log("PRINTED: " + ele);
-                            subjectIDs.Add(ele);
-                        }
-                    }
-                    DoinStuff();
-                }
-                else
-                {
-                    StartCoroutine(GetSubject(rawArray[0]));
-                }
+
             }
         }
     }
@@ -221,27 +170,9 @@ public class LevelManager : MonoBehaviour
                 //Debug.Log("Result: " + rawData);
                 subjectList.Add(rawData);
                 subjectTxt.text = rawData;
-                subjectDict.Add(subjectID, rawData);
-                //StartCoroutine(GetTopics(subjectID));
+                StartCoroutine(GetTopics(subjectID));
             }
         }
-    }
-
-    // Subject Selection Protocol
-    // first get all subjects under user
-    // then get all subject names
-    void DoinStuff()
-    {
-        subjectDropDown.SetActive(true);
-
-        foreach (string ele in subjectIDs)
-        {
-            StartCoroutine(GetSubject(ele));
-        }
-
-        Dropdown sbjDD = subjectDropDown.transform.GetChild(0).GetComponent<Dropdown>();
-        sbjDD.ClearOptions();
-        subjectsAdded = false;
     }
 
     // get the topics, store them in a list, for every topic, instantiate 1 panel
@@ -280,7 +211,8 @@ public class LevelManager : MonoBehaviour
     IEnumerator GetTopics(string subjectID)
     {
         string[] rawArray;
-
+        
+        List<string> rawList = new List<string>();
         string uri = "http://localhost:8080/KidsTest/php/";
         string php = "GetTopic.php";
         WWWForm form = new WWWForm();
@@ -300,39 +232,23 @@ public class LevelManager : MonoBehaviour
                 string rawData = www.downloadHandler.text;
                 Debug.Log("Result: " + rawData);
 
-                rawArray = rawData.Split('`');
-
-                List<string> rawList = new List<string>();
+                rawArray = rawData.Split('!');
 
                 foreach (string ele in rawArray)
                 {
                     if (ele != "")
                     {
-                        rawList.Add(ele);
-                        Debug.Log("Topics: " + ele);
+                        Debug.Log("Flawed: " + ele);
+                        string[] flawedArray;
+                        flawedArray = ele.Split('`');
+                        topicIDs.Add(flawedArray[0]);
+                        topics.Add(flawedArray[1]);
                     }
                 }
 
-                for (int i = 0; i < rawList.Count; i++)
+                for (int i = 0; i < topicIDs.Count; i++)
                 {
-                    if (i % 2 == 0)
-                    {
-                        topicIDs.Add(rawList[i]);
-                    }
-                    else
-                    {
-                        topics.Add(rawList[i]);
-                    }
-                }
-
-                foreach (string ele in topicIDs)
-                {
-                    Debug.Log("In topicIDS: " + ele);
-                }
-
-                foreach (string ele in topics)
-                {
-                    Debug.Log("In topics: " + ele);
+                    Debug.Log("Topic " + topicIDs[i] + ": " + topics[i]);
                 }
 
                 Populate();
@@ -475,7 +391,6 @@ public class LevelManager : MonoBehaviour
             GameObject temp = Instantiate(subtopPrefab, subtopicPanel.transform.GetChild(1).GetChild(0).GetChild(0));
             temp.name = subtopics[i] + "Subtopic" + "Panel";
             temp.transform.GetChild(0).GetComponent<Text>().text = subtopics[i];
-            temp.transform.GetChild(1).GetComponent<Text>().text = "easy";
             temp.AddComponent<Button>();
             temp.GetComponent<Button>().onClick.AddListener(Proceed);
 
@@ -508,7 +423,41 @@ public class LevelManager : MonoBehaviour
         databa.dataDict.Add("subtopic", textList[0]);
         Debug.Log(databa.dataDict["subtopic"]);
 
-        SceneManager.LoadScene("GameScene");
+        StartCoroutine(GetSubTopicInfo(databa.dataDict["subtopicID"]));
+    }
 
+    IEnumerator GetSubTopicInfo(string subtopicID)
+    {
+        Debug.Log("Called");
+        string[] rawArray;
+        string uri = "http://localhost:8080/KidsTest/php/";
+        string php = "GetSubtopicInfo.php";
+        WWWForm form = new WWWForm();
+        form.AddField("subtopicID", subtopicID);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(uri + php, form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Form upload complete!");
+                string rawData = www.downloadHandler.text;
+                Debug.Log("Result: " + rawData);
+                rawArray = rawData.Split('`');
+
+                databa.dataDict.Add("easyCount", rawArray[0]);
+                Debug.Log(databa.dataDict["easyCount"]);
+
+                databa.dataDict.Add("diffCount", rawArray[1]);
+                Debug.Log(databa.dataDict["diffCount"]);
+
+                SceneManager.LoadScene("GameScene");
+            }
+        }
     }
 }

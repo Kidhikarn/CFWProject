@@ -1,5 +1,4 @@
-﻿using Kid.Web;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -7,380 +6,316 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using Unity.Mathematics;
+using System.Threading;
 
 public class QuizManager : MonoBehaviour
 {
-    // game object variables
-    public GameObject questionNum;
-    public GameObject attemptNum;
+    DataBank databa;
 
-    public GameObject questionTxt;
-    public GameObject hintTxt;
-    public GameObject timeTxt;
-    public GameObject scoreTxt;
+    Dictionary<string, string[]> qnInfo = new Dictionary<string, string[]>();
 
-    public GameObject btnA, btnB, btnC, btnD;
+    List<string> hardQn = new List<string>();
+    List<string> easyQn = new List<string>();
+    List<string> qnList = new List<string>();
 
-    public Sprite loadingImg;
+    int currQn;
+    int attempts;
 
-    public GameObject hintBtn;
-    public GameObject gameOverPanel;
-    public GameObject answerStatPanel;
-    public GameObject hintPanel;
+    public int attemptLimit;
+
+    public Text qnCount, attemptCount, qnTxt, mcqA, mcqB, mcqC, mcqD, hintTxt;
+    public Text scoreTxt, timeTxt;
+
+    string currID, currDiff, currAns, currScore, currHints;
+    string startTime;
+
+    public GameObject hintBtn, hintPanel, affirmPanel, endPanel;
     public GameObject pausePanel;
 
-    GameObject dataBankObj;
+    public Sprite tickImg, crossImg;
+    public Sprite lightOnImg, lightOffImg;
 
-    public Sprite corrIcon, wrongIcon;
-
-
-    // database data variables
-    string questionText;
-    string hintText;
-    string questionAnswer;
-
-    string mcqA, mcqB, mcqC, mcqD;
-
-    List<string> qnDataList = new List<string>();
-    List<string> qnList = new List<string>();
-    List<string> optionList = new List<string>();
-
-    public List<GameObject> buttonList = new List<GameObject>();
-    public List<Sprite> spriteList = new List<Sprite>();
-
-    // server images
-    Texture textureA, textureB, textureC, textureD;
-
-    // networking things
-    [SerializeField]
-    private string uri;
-    [SerializeField]
-    private string php;
-
-    // questions things
-    [SerializeField]
-    int qnCount;
-    int attempts;
-    int score;
-
-    float startTime;
     float currTime;
-    float endTime;
+    float recordedTime;
 
-    string currQnRaw;
-
-    bool qnChange;
-    bool hintOpen;
     bool paused;
+    bool hinting;
 
-    // Start is called before the first frame update
     void Start()
     {
-        qnCount = 1;
-        attempts = 1;
-        score = 4;
+        // can get relevant data from databa
+        databa = GameObject.Find("DataBank").GetComponent<DataBank>();
+        Debug.Log("Subtopic ID: " + databa.dataDict["subtopicID"]);
+        Debug.Log("Easy Count: " + databa.dataDict["easyCount"]);
+        Debug.Log("Difficult Count: " + databa.dataDict["diffCount"]);
 
-        startTime = 0;
-        currTime = startTime;
+        currQn = 0;
+        attempts = 0;
+        currTime = 0;
+        recordedTime = 0;
 
-        uri = "http://localhost:8080/KidsTest/";
+        paused = false;
+        hinting = false;
 
-        qnChange = false;
-        hintOpen = false;
+        RecordStart();
 
-        buttonList.Add(btnA);
-        buttonList.Add(btnB);
-        buttonList.Add(btnC);
-        buttonList.Add(btnD);
-
-        dataBankObj = GameObject.Find("DataBank");
-
-        UpdateQNA();
-
-        hintTxt.SetActive(false);
-        hintPanel.SetActive(false);
-        gameOverPanel.SetActive(false);
-        answerStatPanel.SetActive(false);
-
-        StartCoroutine(GetQnData());
-        
+        // get all questions based on subtopic id and store them in a dictionary
+        StartCoroutine(GetAllQnInfo());
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (attempts > 2)
-        {
-            qnChange = true;
-            attempts = 1;
-        }
-        if (qnChange == true && qnList.Count != 0)
-        {
-            SetDefImg();
-            StartNewQuestion();
-            qnChange = false;
-        }
-        HintCheck();
-
-        if (qnCount > 2)
-        {
-            OpenGameOver();
-        }
-
         Timer();
-        scoreTxt.GetComponent<Text>().text = "Score: " + score;
-        timeTxt.GetComponent<Text>().text = "Time: " + Mathf.RoundToInt(currTime) + "s";
+        TriggerHintButton();
+        DisplayCurrent();
+        EndCheck();
     }
-
-    // get qn, mcq options, correct answer & hint from db thru server
-
-    IEnumerator GetQnData()
+   
+    // reminder: qninfo format:
+    // id, difficulty, name, a, b, c, d, answer, score, hint
+    IEnumerator GetAllQnInfo()
     {
-        string[] qnArray;
+        string[] rawArray;
+        string uri = "http://localhost:8080/KidsTest/php/";
+        string php = "GetAllQnInfo.php";
+        WWWForm form = new WWWForm();
+        form.AddField("subtopicID", databa.dataDict["subtopicID"]);
 
-        
-        php = "GetQnInfo.php";
-        using (UnityWebRequest webReq = UnityWebRequest.Get(uri + php))
+        using (UnityWebRequest www = UnityWebRequest.Post(uri + php, form))
         {
-            // Request and wait for the desired page.
-            yield return webReq.SendWebRequest();
+            yield return www.SendWebRequest();
 
-            string[] pages = uri.Split('/');
-            int page = pages.Length - 1;
-
-            if (webReq.isNetworkError)
+            if (www.isNetworkError || www.isHttpError)
             {
-                Debug.Log(pages[page] + ": Error: " + webReq.error);
+                Debug.Log(www.error);
             }
             else
             {
-                Debug.Log(pages[page] + ":\nReceived: " + webReq.downloadHandler.text);
-                string rawData = webReq.downloadHandler.text;
-                qnArray = rawData.Split(';');
-                foreach (string ele in qnArray)
+                Debug.Log("Form upload complete!");
+                string rawData = www.downloadHandler.text;
+                Debug.Log("Result: " + rawData);
+                rawArray = rawData.Split('!');
+
+                // separate hard and ez qns
+                foreach (string ele in rawArray)
                 {
-                    qnList.Add(ele);
+                    if (ele != "")
+                    {
+                        Debug.Log("Question Data: " + ele);
+                        if (ele.Contains("easy"))
+                        {
+                            Debug.Log("Easy qn: " + ele);
+                            easyQn.Add(ele);
+                        }
+                        else if (ele.Contains("hard"))
+                        {
+                            Debug.Log("Hard qn: " + ele);
+                            hardQn.Add(ele);
+                        }
+                    }
+                    
                 }
-                foreach (string question in qnArray)
-                {
-                    Debug.Log(question);
-                }
-                DisplayQn();
+                LineTheQns();
             }
         }
     }
 
-    // get images
-    // set them to corresponding buttons
-
-    IEnumerator GetImages()
+    // shuffle both lists
+    // pick 6 easy and 4 hard
+    // shove em into a list
+    // shuffle the new list
+    // go down the list
+    void LineTheQns()
     {
-        foreach(GameObject button in buttonList)
+        List<string> tempList = new List<string>();
+        int currNum;
+
+        // add 6 easy qns into list
+        for (int i = 0; i < int.Parse(databa.dataDict["easyCount"]); i++)
         {
-            php = "Images/" + button.transform.GetChild(1).GetComponent<Text>().text + ".png";
-
-            UnityWebRequest uwrt = UnityWebRequestTexture.GetTexture(uri + php);
-            Debug.Log("web rq: " + uri + php);
-
-            yield return uwrt.SendWebRequest();
-
-            if (uwrt.isNetworkError || uwrt.isHttpError)
-            {
-                Debug.Log("Error: " + uwrt.error);
-            }
-            else
-            {
-                // Get downloaded asset bundle
-                Texture2D tex = DownloadHandlerTexture.GetContent(uwrt);
-                button.transform.GetChild(0).GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
-            }
-        }
-    }
-
-
-    // set them
-    // must only be called after the coroutine "GetQnData()"
-    void DisplayQn()
-    {
-        int randInt = UnityEngine.Random.Range(0, qnList.Count);
-        Debug.Log("random int: " + randInt);
-
-        currQnRaw = qnList[randInt];
-
-        qnDataList.Clear();
-
-        string[] qnData = currQnRaw.Split('`');
-
-        foreach (string ele in qnData)
-        {
-            qnDataList.Add(ele);
+            int randInt = UnityEngine.Random.Range(0, easyQn.Count);
+            //Debug.Log(easyQn[randInt]);
+            tempList.Add(easyQn[randInt]);
+            //Debug.Log(easyQn[randInt]);
+            easyQn.RemoveAt(randInt);
         }
 
-        questionTxt.GetComponent<Text>().text = qnDataList[0];
-        //hintText = qnDataList[1];
-        //Debug.Log("hint: " + hintText);
-        optionList.Add(qnDataList[2]);
-        optionList.Add(qnDataList[3]);
-        optionList.Add(qnDataList[4]);
-        optionList.Add(qnDataList[5]);
-        
-        for(int i = 0; i < buttonList.Count; i++)
+        // add 4 hard qns into list
+        for (int i = 0; i < int.Parse(databa.dataDict["diffCount"]); i++)
         {
-            int ranNum = UnityEngine.Random.Range(0, optionList.Count);
-            buttonList[i].transform.GetChild(1).GetComponent<Text>().text = optionList[ranNum];
-            optionList.Remove(optionList[ranNum]);
+            int randInt = UnityEngine.Random.Range(0, hardQn.Count);
+            //Debug.Log(easyQn[randInt]);
+            tempList.Add(hardQn[randInt]);
+            //Debug.Log(easyQn[randInt]);
+            hardQn.RemoveAt(randInt);
         }
 
-        questionAnswer = qnDataList[6];
-        Debug.Log("correct answer: " + questionAnswer);
-        StartCoroutine(GetImages());
-    }
+        currNum = tempList.Count;
 
-
-    //check input against correct answer
-    public void InputAnswer()
-    {
-        GameObject input = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-        string inputAnswer = input.transform.GetChild(1).GetComponent<Text>().text;
-        Debug.Log("Input Answer: " + inputAnswer);
-        CheckAnswer(inputAnswer);
-    }
-
-    void CheckAnswer(string input)
-    {
-        paused = true;
-        if (input == questionAnswer)
+        // shuffle and add into qnList
+        for (int i = 0; i < currNum; i++)
         {
-            // move on to next qn
-            answerStatPanel.SetActive(true);
-            answerStatPanel.transform.GetChild(1).GetComponent<Image>().sprite = corrIcon;
+            int randInt = UnityEngine.Random.Range(0, tempList.Count);
+            //Debug.Log(easyQn[randInt]);
+            qnList.Add(tempList[randInt]);
+            //Debug.Log(easyQn[randInt]);
+            tempList.RemoveAt(randInt);
         }
-        else
-        {
-            Debug.Log("You are stupid");
-            score--;
-            answerStatPanel.SetActive(true);
-            answerStatPanel.transform.GetChild(1).GetComponent<Image>().sprite = wrongIcon;
-            // show hints
-            attempts++;
-            UpdateQNA();
-        }
+
+        Debug.Log("QnList Length: " + qnList.Count);
+
+        QnDisplay();
     }
 
-    void UpdateQNA()
+    // display qn
+    // show qn, a, b, c, d
+    // public Text qnCount, attemptCount, qnTxt, mcqA, mcqB, mcqC, mcqD, hintTxt;
+    void QnDisplay()
     {
-        questionNum.GetComponent<Text>().text = "Question: " + qnCount;
-        attemptNum.GetComponent<Text>().text = "Attempts: " + attempts;
-    }
-
-    void StartNewQuestion()
-    {
-        
-       foreach (string ele in qnList)
-       {
-            if (ele == currQnRaw)
-            {
-                qnList.Remove(ele);
-                break;
-            }
-       }
-       
-
-        qnCount++;
+        currQn++;
         attempts = 1;
-        UpdateQNA();
+        recordedTime = currTime;
 
-        qnDataList.Clear();
-        DisplayQn();
+        hintBtn.SetActive(false);
+
+        string[] qnArray = qnList[currQn - 1].Split('`');
+
+        // qn id
+        currID = qnArray[0];
+        Debug.Log("Current Qn ID: " + currID);
+        // difficulty
+        currDiff = qnArray[1];
+        Debug.Log("Current Qn Difficulty: " + currDiff);
+        // qn name
+        qnTxt.text = qnArray[2];
+        // a
+        mcqA.text = qnArray[3];
+        // b
+        mcqB.text = qnArray[4];
+        // c
+        mcqC.text = qnArray[5];
+        // d
+        mcqD.text = qnArray[6];
+        // answer
+        currAns = qnArray[7];
+        Debug.Log("Current Qn Answer: " + currAns);
+        // score
+        currScore = qnArray[8];
+        Debug.Log("Current Qn Score: " + currScore);
+        // hints
+        currHints = qnArray[9];
+        Debug.Log("Current Qn Hints: " + currHints);
+
     }
 
-    void SetDefImg()
+    void DisplayCurrent()
     {
-        foreach(GameObject button in buttonList)
-        {
-            button.transform.GetChild(0).GetComponent<Image>().sprite = loadingImg;
-        }
+        qnCount.text = "Question: " + currQn.ToString();
+        attemptCount.text = "Attempt: " + attempts.ToString();
     }
 
-    void HintCheck()
+    public void Answer()
     {
-        if (attempts > 1)
-        {
-            hintBtn.SetActive(true);
-        }
-        else if (Mathf.RoundToInt(currTime) == 10 && qnCount == 1)
-        {
-            hintBtn.SetActive(true);
-        }
-        /*
-        else
-        {
-            hintBtn.SetActive(false);
-        }
-        */
-    }
+        string selected = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name;
+        Debug.Log("Selected: " + selected);
 
-    // we want to set the hint text upon opening the hint panel
-    public void ToggleHint()
-    {
-        if(hintOpen == true)
-        {
-            hintPanel.SetActive(false);
-            hintOpen = false;
-        }
-        else
-        {
-            hintPanel.SetActive(true);
-            hintOpen = true;
-
-            hintTxt.SetActive(true);
-            hintText = qnDataList[1];
-            hintTxt.GetComponent<Text>().text = hintText;
-            Debug.Log("hint: " + hintText);
-        }
-    }
-
-    public void OpenGameOver()
-    {
+        AffirmAnswer(selected);
         
-        GoNext();
-        paused = true;
-        gameOverPanel.SetActive(true);
-        gameOverPanel.transform.GetChild(5).GetComponent<Text>().text = score.ToString();
     }
 
-    public void GoNext()
+    void AttemptCheck(int limit)
     {
-        paused = false;
-        answerStatPanel.SetActive(false);
-        if (answerStatPanel.transform.GetChild(1).GetComponent<Image>().sprite == corrIcon)
+        if (attempts > limit)
         {
-            qnChange = true;
-            hintBtn.SetActive(false);
+            QnDisplay();
         }
+    }
+
+    void EndCheck()
+    {
+        if (currQn > qnList.Count)
+        {
+            Debug.Log("You did it");
+            affirmPanel.SetActive(false);
+            endPanel.SetActive(true);
+
+        }
+    }
+
+    void AffirmAnswer(string selected)
+    {
+        affirmPanel.SetActive(true);
+        if (selected == currAns)
+        {
+            affirmPanel.transform.GetChild(1).GetComponent<Image>().sprite = tickImg;
+            affirmPanel.transform.GetChild(3).GetComponent<Text>().text = "Good Job!";
+        }
+        else
+        {
+            affirmPanel.transform.GetChild(1).GetComponent<Image>().sprite = crossImg;
+            affirmPanel.transform.GetChild(3).GetComponent<Text>().text = "Try Again!";
+        }
+    }
+
+    public void UnAffirm()
+    {
+        if (affirmPanel.transform.GetChild(3).GetComponent<Text>().text == "Good Job!")
+        {
+            QnDisplay();
+        }
+        else
+        {
+            attempts++;
+        }
+        AttemptCheck(attemptLimit);
+        affirmPanel.SetActive(false);
+    }
+
+    void RecordStart()
+    {
+        DateTime dt = DateTime.Now;
+        startTime = dt.ToString();
+        Debug.Log("Quiz Started at: " + startTime);
     }
 
     void Timer()
     {
-        if(paused == false)
+        if (paused == false && currQn <= qnList.Count)
         {
             currTime += Time.deltaTime;
-            
+            timeTxt.GetComponent<Text>().text = "Elapsed: " + Mathf.RoundToInt(currTime).ToString() + "s";
         }
-        Debug.Log("Time elapsed: " + Mathf.RoundToInt(currTime));
     }
 
-    public void TogglePause()
+    public void TriggerPause()
     {
         paused = !paused;
-        if (paused == true)
+        pausePanel.SetActive(paused);
+    }
+
+    void TriggerHintButton()
+    {
+        if ((currTime - recordedTime >= 10) || attempts == 2)
         {
-            pausePanel.SetActive(true);
+            hintBtn.SetActive(true);
+        }
+    }
+
+    public void TriggerHint()
+    {
+        hinting = !hinting;
+        hintPanel.SetActive(hinting);
+        
+        if (hinting == true)
+        {
+            hintBtn.GetComponent<Image>().sprite = lightOnImg;
+            hintPanel.transform.GetChild(1).GetChild(1).GetComponent<Text>().text = currHints;
         }
         else
         {
-            pausePanel.SetActive(false);
+            hintBtn.GetComponent<Image>().sprite = lightOffImg;
         }
     }
-
 }

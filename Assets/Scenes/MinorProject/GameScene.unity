@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 22066626}
   - component: {fileID: 22066625}
   m_Layer: 5
-  m_Name: AnswerStatusPanel
+  m_Name: AffirmationPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -232,6 +232,7 @@ RectTransform:
   - {fileID: 122833221}
   - {fileID: 876037353}
   - {fileID: 1341206071}
+  - {fileID: 212269653}
   m_Father: {fileID: 421680742}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -528,6 +529,84 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 122833220}
+  m_CullTransparentMesh: 0
+--- !u!1 &212269652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 212269653}
+  - component: {fileID: 212269655}
+  - component: {fileID: 212269654}
+  m_Layer: 5
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &212269653
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212269652}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 22066624}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -35}
+  m_SizeDelta: {x: 250, y: 75}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &212269654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212269652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 1
+    m_BestFit: 1
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: New Text
+--- !u!222 &212269655
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212269652}
   m_CullTransparentMesh: 0
 --- !u!1 &275304377
 GameObject:
@@ -1166,7 +1245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1559,7 +1638,7 @@ GameObject:
   - component: {fileID: 584702388}
   - component: {fileID: 584702387}
   m_Layer: 5
-  m_Name: BtnB
+  m_Name: b
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1629,8 +1708,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1245311898}
-        m_MethodName: AnswerCheck
+      - m_Target: {fileID: 870275699}
+        m_MethodName: Answer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1879,7 +1958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1957,7 +2036,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2178,7 +2257,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &870275699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2191,29 +2270,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515be3660b9ce704eb11fb7113164147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questionNum: {fileID: 720371484}
-  attemptNum: {fileID: 1937292549}
-  questionTxt: {fileID: 1490992296}
-  hintTxt: {fileID: 1996918116}
-  timeTxt: {fileID: 1086720424}
-  scoreTxt: {fileID: 1058761462}
-  btnA: {fileID: 1637471494}
-  btnB: {fileID: 584702385}
-  btnC: {fileID: 1607443955}
-  btnD: {fileID: 1132286700}
-  loadingImg: {fileID: 21300000, guid: e5dce411781837949948be359a84afef, type: 3}
+  attemptLimit: 2
+  qnCount: {fileID: 720371486}
+  attemptCount: {fileID: 1937292551}
+  qnTxt: {fileID: 1490992298}
+  mcqA: {fileID: 1985991281}
+  mcqB: {fileID: 275304379}
+  mcqC: {fileID: 333459682}
+  mcqD: {fileID: 925031770}
+  hintTxt: {fileID: 1996918118}
+  scoreTxt: {fileID: 1058761464}
+  timeTxt: {fileID: 1086720426}
   hintBtn: {fileID: 1046425692}
-  gameOverPanel: {fileID: 2010422530}
-  answerStatPanel: {fileID: 22066623}
   hintPanel: {fileID: 762310692}
+  affirmPanel: {fileID: 22066623}
+  endPanel: {fileID: 2010422530}
   pausePanel: {fileID: 954549454}
-  corrIcon: {fileID: 21300000, guid: 01cba900131c23f4ea0ab07c4f82c92e, type: 3}
-  wrongIcon: {fileID: 21300000, guid: 76ca0359dd526524abb883af48d73264, type: 3}
-  buttonList: []
-  spriteList: []
-  uri: 
-  php: 
-  qnCount: 0
+  tickImg: {fileID: 21300000, guid: 01cba900131c23f4ea0ab07c4f82c92e, type: 3}
+  crossImg: {fileID: 21300000, guid: 76ca0359dd526524abb883af48d73264, type: 3}
+  lightOnImg: {fileID: 21300000, guid: 65c234431f1b40b4b981bb0dcbb8fae4, type: 3}
+  lightOffImg: {fileID: 21300000, guid: 41982e28079be3640a6b141090162139, type: 3}
 --- !u!4 &870275700
 Transform:
   m_ObjectHideFlags: 0
@@ -2263,7 +2339,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 100}
-  m_SizeDelta: {x: 250, y: 250}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &876037354
 MonoBehaviour:
@@ -2715,7 +2791,7 @@ GameObject:
   - component: {fileID: 1035881973}
   - component: {fileID: 1035881972}
   m_Layer: 5
-  m_Name: RetyBtn
+  m_Name: RetryBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2913,8 +2989,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1245311898}
-        m_MethodName: ToggleHint
+      - m_Target: {fileID: 870275699}
+        m_MethodName: TriggerHint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3011,7 +3087,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3121,8 +3197,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1245311898}
-        m_MethodName: TogglePause
+      - m_Target: {fileID: 870275699}
+        m_MethodName: TriggerPause
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3219,7 +3295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3260,7 +3336,7 @@ GameObject:
   - component: {fileID: 1132286702}
   - component: {fileID: 1132286701}
   m_Layer: 5
-  m_Name: BtnD
+  m_Name: d
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3309,8 +3385,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1245311898}
-        m_MethodName: AnswerCheck
+      - m_Target: {fileID: 870275699}
+        m_MethodName: Answer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3394,7 +3470,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1245311898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3631,7 +3707,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -100}
+  m_AnchoredPosition: {x: 0, y: -110}
   m_SizeDelta: {x: 250, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1341206072
@@ -3677,8 +3753,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1245311898}
-        m_MethodName: CloseStat
+      - m_Target: {fileID: 870275699}
+        m_MethodName: UnAffirm
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3972,7 +4048,7 @@ GameObject:
   - component: {fileID: 1607443958}
   - component: {fileID: 1607443957}
   m_Layer: 5
-  m_Name: BtnC
+  m_Name: c
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4042,8 +4118,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1245311898}
-        m_MethodName: AnswerCheck
+      - m_Target: {fileID: 870275699}
+        m_MethodName: Answer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4172,8 +4248,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1245311898}
-        m_MethodName: TogglePause
+      - m_Target: {fileID: 870275699}
+        m_MethodName: TriggerPause
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4233,7 +4309,7 @@ GameObject:
   - component: {fileID: 1637471497}
   - component: {fileID: 1637471496}
   m_Layer: 5
-  m_Name: BtnA
+  m_Name: a
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4303,8 +4379,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1245311898}
-        m_MethodName: AnswerCheck
+      - m_Target: {fileID: 870275699}
+        m_MethodName: Answer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4709,7 +4785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6493385, g: 1, b: 0.5613208, a: 1}
+  m_Color: {r: 0.15886122, g: 0.7735849, b: 0, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4824,7 +4900,7 @@ GameObject:
   - component: {fileID: 2010422533}
   - component: {fileID: 2010422532}
   m_Layer: 5
-  m_Name: GameOverPanel
+  m_Name: EndPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

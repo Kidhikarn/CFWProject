@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -32,5 +33,10 @@ public class SceneChange : MonoBehaviour
         }
         SceneManager.LoadScene("Title");
 
+    }
+
+    public void GoToGame()
+    {
+        SceneManager.LoadScene("GameScene");
     }
 }
