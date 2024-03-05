@@ -281,7 +281,7 @@ GameObject:
   - component: {fileID: 3787370676324895761}
   - component: {fileID: 3787370676324895760}
   m_Layer: 5
-  m_Name: Subject
+  m_Name: TopicTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -346,4 +346,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Subject
+  m_Text: Topic

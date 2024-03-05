@@ -383,21 +383,4 @@ public class QuizManager : MonoBehaviour
         }
     }
 
-    void CheckDBO()
-    {
-        if (dataBankObj != null)
-        {
-            DataBank databa = dataBankObj.GetComponent<DataBank>();
-
-            Debug.Log(databa.dataDict["username"]);
-            Debug.Log(databa.dataDict["subjects"]);
-            Debug.Log(databa.dataDict["level"]);
-            Debug.Log(databa.dataDict["class"]);
-            Debug.Log(databa.dataDict["experience"]);
-        }
-        else
-        {
-            Debug.Log("Databank not found");
-        }
-    }
 }

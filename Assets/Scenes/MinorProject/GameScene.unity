@@ -1629,8 +1629,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870275699}
-        m_MethodName: InputAnswer
+      - m_Target: {fileID: 1245311898}
+        m_MethodName: AnswerCheck
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2178,7 +2178,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &870275699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2913,7 +2913,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870275699}
+      - m_Target: {fileID: 1245311898}
         m_MethodName: ToggleHint
         m_Mode: 1
         m_Arguments:
@@ -3121,7 +3121,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870275699}
+      - m_Target: {fileID: 1245311898}
         m_MethodName: TogglePause
         m_Mode: 1
         m_Arguments:
@@ -3309,8 +3309,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870275699}
-        m_MethodName: InputAnswer
+      - m_Target: {fileID: 1245311898}
+        m_MethodName: AnswerCheck
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3378,6 +3378,66 @@ RectTransform:
   m_AnchoredPosition: {x: 223.64699, y: -137.1}
   m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1245311897
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1245311899}
+  - component: {fileID: 1245311898}
+  m_Layer: 0
+  m_Name: QuestionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1245311898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245311897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1115719c0278a3844be34df200145def, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questionTxt: {fileID: 1490992296}
+  qnCountTxt: {fileID: 720371484}
+  attemptCountTxt: {fileID: 1937292549}
+  hintBtn: {fileID: 1046425692}
+  hintPanel: {fileID: 762310692}
+  pausePanel: {fileID: 954549454}
+  timeTxt: {fileID: 1086720424}
+  gameOverPanel: {fileID: 2010422530}
+  scoreTxt: {fileID: 1058761462}
+  btnList:
+  - {fileID: 1637471494}
+  - {fileID: 584702385}
+  - {fileID: 1607443955}
+  - {fileID: 1132286700}
+  answerStatPanel: {fileID: 22066623}
+  rightIcon: {fileID: 21300000, guid: 01cba900131c23f4ea0ab07c4f82c92e, type: 3}
+  wrongIcon: {fileID: 21300000, guid: 76ca0359dd526524abb883af48d73264, type: 3}
+--- !u!4 &1245311899
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245311897}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 565.78827, y: 254.93808, z: -25.594957}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1257857719
 GameObject:
   m_ObjectHideFlags: 0
@@ -3617,8 +3677,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870275699}
-        m_MethodName: GoNext
+      - m_Target: {fileID: 1245311898}
+        m_MethodName: CloseStat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3982,8 +4042,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870275699}
-        m_MethodName: InputAnswer
+      - m_Target: {fileID: 1245311898}
+        m_MethodName: AnswerCheck
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4112,7 +4172,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870275699}
+      - m_Target: {fileID: 1245311898}
         m_MethodName: TogglePause
         m_Mode: 1
         m_Arguments:
@@ -4243,8 +4303,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870275699}
-        m_MethodName: InputAnswer
+      - m_Target: {fileID: 1245311898}
+        m_MethodName: AnswerCheck
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

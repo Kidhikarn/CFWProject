@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class TitleScreen : MonoBehaviour
 {
     public GameObject usrWrnTxt;
-    public GameObject pswdWrnTxt;
     public GameObject loginCanvas;
     public GameObject playBtn;
     public GameObject dataBank;
@@ -18,12 +17,10 @@ public class TitleScreen : MonoBehaviour
     public string php;
 
     string username;
-    string password;
-    float subjects;
 
     bool nameIn;
-    bool passIn;
     bool successTrigger;
+    bool saved;
 
     DataBank daBank;
 
@@ -33,9 +30,9 @@ public class TitleScreen : MonoBehaviour
     void Start()
     {
         usrWrnTxt.SetActive(false);
-        pswdWrnTxt.SetActive(false);
 
         successTrigger = false;
+        saved = false;
         daBank = dataBank.GetComponent<DataBank>();
     }
 
@@ -47,6 +44,12 @@ public class TitleScreen : MonoBehaviour
             EnablePlayBtn();
         }
     }
+
+    // Check if username bar has something
+    // Check if username exists
+    // Get id from table where username matches
+
+
 
     public void InputUsername(string input)
     {
@@ -64,37 +67,16 @@ public class TitleScreen : MonoBehaviour
         }
         
     }
-    
-    public void InputPassword(string input)
-    {
-        if (input == null || input == "")
-        {
-            pswdWrnTxt.SetActive(true);
-            passIn = false;
-        }
-        else
-        {
-            password = input;
-            Debug.Log("Password: " + password);
-            pswdWrnTxt.SetActive(false);
-            passIn = true;
-        }
-        
-    }
 
     public void CheckInputs(string button)
     {
-        if (nameIn == true && passIn == true)
+        if (nameIn == true)
         {
             usrWrnTxt.SetActive(false);
-            pswdWrnTxt.SetActive(false);
             switch (button)
             {
                 case "login":
                     StartCoroutine(Login());
-                    break;
-                case "signup":
-                    StartCoroutine(SignUp());
                     break;
             }
             
@@ -110,19 +92,15 @@ public class TitleScreen : MonoBehaviour
             usrWrnTxt.GetComponent<Text>().text = "Enter username please!";
         }
 
-        if (passIn == false)
-        {
-            pswdWrnTxt.SetActive(true);
-        }
 
     }
 
     IEnumerator Login()
     {
-        php = "GameLogin.php";
+        php = "php/Login.php";
         WWWForm form = new WWWForm();
         form.AddField("loginUser", username);
-        form.AddField("loginPass", password);
+        //form.AddField("loginPass", password);
 
         using (UnityWebRequest www = UnityWebRequest.Post(uri + php, form))
         {
@@ -148,64 +126,29 @@ public class TitleScreen : MonoBehaviour
                 }
             }
         }
-        saveInDataBank();
-    }
-
-    IEnumerator SignUp()
-    {
-        php = "GameSignUp.php";
-        WWWForm form = new WWWForm();
-        form.AddField("loginUser", username);
-        form.AddField("loginPass", password);
-
-        using (UnityWebRequest www = UnityWebRequest.Post(uri + php, form))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.isNetworkError || www.isHttpError)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log("Form upload complete!");
-                string rawData = www.downloadHandler.text;
-                Debug.Log("Raw Data: " + rawData);
-                if (rawData == "Exists" || rawData == "Failure")
-                {
-                    usrWrnTxt.SetActive(true);
-                    usrWrnTxt.GetComponent<Text>().text = "Try again with a different username!";
-                }
-                else if (rawData == "Success")
-                {
-                    successTrigger = true;
-                }
-            }
-        }
-        saveInDataBank();
     }
 
     void EnablePlayBtn()
     {
+        saveInDataBank();
         playBtn.SetActive(true);
         loginCanvas.SetActive(false);
     }
 
     void saveInDataBank()
     {
-        foreach(string ele in rawArray)
+        if (saved == false)
         {
-            Debug.Log(ele);
+            foreach (string ele in rawArray)
+            {
+                Debug.Log(ele);
+            }
+            daBank.dataDict.Add("username", username);
+            Debug.Log("username: " + daBank.dataDict["username"]);
+            daBank.dataDict.Add("userID", rawArray[0]);
+            Debug.Log("user ID: " + daBank.dataDict["userID"]);
+            saved = true;
         }
-        daBank.dataDict.Add("username", username);
-        Debug.Log(daBank.dataDict["username"]);
-        daBank.dataDict.Add("subjects", rawArray[0]);
-        Debug.Log(daBank.dataDict["subjects"]);
-        daBank.dataDict.Add("level", rawArray[1]);
-        Debug.Log(daBank.dataDict["level"]);
-        daBank.dataDict.Add("class", rawArray[2]);
-        Debug.Log(daBank.dataDict["class"]);
-        daBank.dataDict.Add("experience", rawArray[3]);
-        Debug.Log(daBank.dataDict["experience"]);
+        
     }
 }
