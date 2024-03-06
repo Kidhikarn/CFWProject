@@ -22,6 +22,7 @@ public class QuizManager : MonoBehaviour
 
     int currQn;
     int attempts;
+    int totalScore;
 
     public int attemptLimit;
 
@@ -55,6 +56,7 @@ public class QuizManager : MonoBehaviour
         attempts = 0;
         currTime = 0;
         recordedTime = 0;
+        totalScore = 0;
 
         paused = false;
         hinting = false;
@@ -214,6 +216,7 @@ public class QuizManager : MonoBehaviour
     {
         qnCount.text = "Question: " + currQn.ToString();
         attemptCount.text = "Attempt: " + attempts.ToString();
+        scoreTxt.text = "Score: " + totalScore;
     }
 
     public void Answer()
@@ -240,7 +243,7 @@ public class QuizManager : MonoBehaviour
             Debug.Log("You did it");
             affirmPanel.SetActive(false);
             endPanel.SetActive(true);
-
+            endPanel.transform.GetChild(5).GetComponent<Text>().text = totalScore.ToString();
         }
     }
 
@@ -263,6 +266,14 @@ public class QuizManager : MonoBehaviour
     {
         if (affirmPanel.transform.GetChild(3).GetComponent<Text>().text == "Good Job!")
         {
+            if (attempts > 1)
+            {
+                totalScore += int.Parse(currScore);
+            }
+            else
+            {
+                totalScore += int.Parse(currScore) * 2;
+            }
             QnDisplay();
         }
         else
@@ -317,5 +328,13 @@ public class QuizManager : MonoBehaviour
         {
             hintBtn.GetComponent<Image>().sprite = lightOffImg;
         }
+    }
+
+    // facilitate subtopic attempt log
+    // it needs start time, duration, star number, score, best fleg, user id, subtopic id, creation time(in php)
+
+    void RecordSubtopicAttempt()
+    {
+
     }
 }
