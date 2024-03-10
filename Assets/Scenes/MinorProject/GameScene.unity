@@ -313,7 +313,7 @@ GameObject:
   - component: {fileID: 28688395}
   - component: {fileID: 28688394}
   m_Layer: 5
-  m_Name: Image
+  m_Name: PausePanelImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -390,7 +390,7 @@ GameObject:
   - component: {fileID: 89949731}
   - component: {fileID: 89949730}
   m_Layer: 5
-  m_Name: Text
+  m_Name: DoneBtnTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -542,7 +542,7 @@ GameObject:
   - component: {fileID: 212269655}
   - component: {fileID: 212269654}
   m_Layer: 5
-  m_Name: Text
+  m_Name: AffirmTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -620,7 +620,7 @@ GameObject:
   - component: {fileID: 275304380}
   - component: {fileID: 275304379}
   m_Layer: 5
-  m_Name: Text
+  m_Name: bTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -772,7 +772,7 @@ GameObject:
   - component: {fileID: 317792423}
   - component: {fileID: 317792422}
   m_Layer: 5
-  m_Name: Text
+  m_Name: PauseBtnTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -850,7 +850,7 @@ GameObject:
   - component: {fileID: 321747899}
   - component: {fileID: 321747898}
   m_Layer: 5
-  m_Name: Text
+  m_Name: QuitBtnTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -928,7 +928,7 @@ GameObject:
   - component: {fileID: 333459683}
   - component: {fileID: 333459682}
   m_Layer: 5
-  m_Name: Text
+  m_Name: cTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1207,7 +1207,7 @@ GameObject:
   - component: {fileID: 424080560}
   - component: {fileID: 424080559}
   m_Layer: 5
-  m_Name: Text
+  m_Name: ScoreTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1359,7 +1359,7 @@ GameObject:
   - component: {fileID: 536166713}
   - component: {fileID: 536166712}
   m_Layer: 5
-  m_Name: Image
+  m_Name: aImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1434,7 +1434,7 @@ GameObject:
   - component: {fileID: 536881902}
   - component: {fileID: 536881901}
   m_Layer: 5
-  m_Name: QuitBtn (1)
+  m_Name: QuitBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1768,7 +1768,7 @@ GameObject:
   - component: {fileID: 654629439}
   - component: {fileID: 654629438}
   m_Layer: 5
-  m_Name: Image
+  m_Name: bImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2270,6 +2270,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515be3660b9ce704eb11fb7113164147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mcqOptions:
+  - {fileID: 1637471494}
+  - {fileID: 584702385}
+  - {fileID: 1607443955}
+  - {fileID: 1132286700}
   attemptLimit: 2
   qnCount: {fileID: 720371486}
   attemptCount: {fileID: 1937292551}
@@ -2290,6 +2295,8 @@ MonoBehaviour:
   crossImg: {fileID: 21300000, guid: 76ca0359dd526524abb883af48d73264, type: 3}
   lightOnImg: {fileID: 21300000, guid: 65c234431f1b40b4b981bb0dcbb8fae4, type: 3}
   lightOffImg: {fileID: 21300000, guid: 41982e28079be3640a6b141090162139, type: 3}
+  domainName: http://localhost:8080/KidsTest/
+  folderPath: php/
 --- !u!4 &870275700
 Transform:
   m_ObjectHideFlags: 0
@@ -2316,7 +2323,7 @@ GameObject:
   - component: {fileID: 876037355}
   - component: {fileID: 876037354}
   m_Layer: 5
-  m_Name: Image
+  m_Name: AffirmImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2390,7 +2397,7 @@ GameObject:
   - component: {fileID: 925031771}
   - component: {fileID: 925031770}
   m_Layer: 5
-  m_Name: Text
+  m_Name: dTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2582,7 +2589,7 @@ GameObject:
   - component: {fileID: 1000041060}
   - component: {fileID: 1000041059}
   m_Layer: 5
-  m_Name: Text
+  m_Name: QuitBtnTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2661,7 +2668,7 @@ GameObject:
   - component: {fileID: 1004381504}
   - component: {fileID: 1004381503}
   m_Layer: 5
-  m_Name: RetyBtn (1)
+  m_Name: RetryBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3454,66 +3461,6 @@ RectTransform:
   m_AnchoredPosition: {x: 223.64699, y: -137.1}
   m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1245311897
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1245311899}
-  - component: {fileID: 1245311898}
-  m_Layer: 0
-  m_Name: QuestionManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1245311898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1245311897}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1115719c0278a3844be34df200145def, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  questionTxt: {fileID: 1490992296}
-  qnCountTxt: {fileID: 720371484}
-  attemptCountTxt: {fileID: 1937292549}
-  hintBtn: {fileID: 1046425692}
-  hintPanel: {fileID: 762310692}
-  pausePanel: {fileID: 954549454}
-  timeTxt: {fileID: 1086720424}
-  gameOverPanel: {fileID: 2010422530}
-  scoreTxt: {fileID: 1058761462}
-  btnList:
-  - {fileID: 1637471494}
-  - {fileID: 584702385}
-  - {fileID: 1607443955}
-  - {fileID: 1132286700}
-  answerStatPanel: {fileID: 22066623}
-  rightIcon: {fileID: 21300000, guid: 01cba900131c23f4ea0ab07c4f82c92e, type: 3}
-  wrongIcon: {fileID: 21300000, guid: 76ca0359dd526524abb883af48d73264, type: 3}
---- !u!4 &1245311899
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1245311897}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 565.78827, y: 254.93808, z: -25.594957}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1257857719
 GameObject:
   m_ObjectHideFlags: 0
@@ -3684,7 +3631,7 @@ GameObject:
   - component: {fileID: 1341206073}
   - component: {fileID: 1341206072}
   m_Layer: 5
-  m_Name: Button
+  m_Name: DoneBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3891,7 +3838,7 @@ GameObject:
   - component: {fileID: 1505356589}
   - component: {fileID: 1505356588}
   m_Layer: 5
-  m_Name: Text
+  m_Name: ResumeBtnTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3969,7 +3916,7 @@ GameObject:
   - component: {fileID: 1606089443}
   - component: {fileID: 1606089442}
   m_Layer: 5
-  m_Name: Text
+  m_Name: PauseTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4513,7 +4460,7 @@ GameObject:
   - component: {fileID: 1931357112}
   - component: {fileID: 1931357111}
   m_Layer: 5
-  m_Name: Text
+  m_Name: RetryBtnTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4669,7 +4616,7 @@ GameObject:
   - component: {fileID: 1985991282}
   - component: {fileID: 1985991281}
   m_Layer: 5
-  m_Name: Text
+  m_Name: aTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4825,7 +4772,7 @@ GameObject:
   - component: {fileID: 2007352914}
   - component: {fileID: 2007352913}
   m_Layer: 5
-  m_Name: Image
+  m_Name: cImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5003,7 +4950,7 @@ GameObject:
   - component: {fileID: 2045970171}
   - component: {fileID: 2045970170}
   m_Layer: 5
-  m_Name: Image
+  m_Name: dImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5077,7 +5024,7 @@ GameObject:
   - component: {fileID: 2063391435}
   - component: {fileID: 2063391434}
   m_Layer: 5
-  m_Name: Text
+  m_Name: RetryBtnTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

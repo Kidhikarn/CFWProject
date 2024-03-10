@@ -36,9 +36,8 @@ public class LevelManager : MonoBehaviour
     public GameObject lPA;
     public GameObject helpPanel;
     public GameObject subtopicPanel;
-    public GameObject subjectDropDown;
 
-
+    public string domainFolder;
 
     // Start is called before the first frame update
     void Start()
@@ -52,7 +51,6 @@ public class LevelManager : MonoBehaviour
         helping = false;
         helpPanel.SetActive(false);
         subtopicPanel.SetActive(false);
-        subjectDropDown.SetActive(false);
         subtopicking = false;
         subjectsAdded = true;
 
@@ -64,7 +62,6 @@ public class LevelManager : MonoBehaviour
     {
         if (subjectIDs.Count <= subjectList.Count && subjectsAdded == false)
         {
-            subjectDropDown.transform.GetChild(0).GetComponent<Dropdown>().AddOptions(subjectList);
             subjectsAdded = true;
             GetTheTopics();
         }
@@ -93,12 +90,11 @@ public class LevelManager : MonoBehaviour
         string userID = databa.dataDict["userID"];
         Debug.Log("user ID extracted: " + userID);
 
-        string uri = "http://localhost:8080/KidsTest/php/";
         string php = "GetSubjectClassEnrolment.php";
         WWWForm form = new WWWForm();
         form.AddField("userID", userID);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(uri + php, form))
+        using (UnityWebRequest www = UnityWebRequest.Post(domainFolder + php, form))
         {
             yield return www.SendWebRequest();
 
@@ -121,12 +117,11 @@ public class LevelManager : MonoBehaviour
     IEnumerator GetSubjectClass(string classID)
     {
         string[] rawArray;
-        string uri = "http://localhost:8080/KidsTest/php/";
         string php = "GetSubjectClass.php";
         WWWForm form = new WWWForm();
         form.AddField("classID", classID);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(uri + php, form))
+        using (UnityWebRequest www = UnityWebRequest.Post(domainFolder + php, form))
         {
             yield return www.SendWebRequest();
 
@@ -143,19 +138,17 @@ public class LevelManager : MonoBehaviour
                 classTxt.text = rawArray[0];
                 StartCoroutine(GetSubject(rawArray[1]));
 
-
             }
         }
     }
 
     IEnumerator GetSubject(string subjectID)
     {
-        string uri = "http://localhost:8080/KidsTest/php/";
         string php = "GetSubject.php";
         WWWForm form = new WWWForm();
         form.AddField("subjectID", subjectID);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(uri + php, form))
+        using (UnityWebRequest www = UnityWebRequest.Post(domainFolder + php, form))
         {
             yield return www.SendWebRequest();
 
@@ -193,17 +186,6 @@ public class LevelManager : MonoBehaviour
             }
             
         }
-
-        string subjectName = subjectDropDown.transform.GetChild(0).GetChild(0).GetComponent<Text>().text;
-
-        for (int i = 0; i < subjectIDs.Count; i++)
-        {
-            if (subjectList[i] == subjectName)
-            {
-                subjectID = subjectIDs[i];
-                StartCoroutine(GetTopics(subjectID));
-            }
-        }
         
     }
 
@@ -213,12 +195,11 @@ public class LevelManager : MonoBehaviour
         string[] rawArray;
         
         List<string> rawList = new List<string>();
-        string uri = "http://localhost:8080/KidsTest/php/";
         string php = "GetTopic.php";
         WWWForm form = new WWWForm();
         form.AddField("subjectID", subjectID);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(uri + php, form))
+        using (UnityWebRequest www = UnityWebRequest.Post(domainFolder + php, form))
         {
             yield return www.SendWebRequest();
 
@@ -333,12 +314,11 @@ public class LevelManager : MonoBehaviour
     {
         Debug.Log("Called");
         string[] rawArray;
-        string uri = "http://localhost:8080/KidsTest/php/";
         string php = "GetSubtopic.php";
         WWWForm form = new WWWForm();
         form.AddField("topicID", topicID);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(uri + php, form))
+        using (UnityWebRequest www = UnityWebRequest.Post(domainFolder + php, form))
         {
             yield return www.SendWebRequest();
 
@@ -403,10 +383,7 @@ public class LevelManager : MonoBehaviour
     {
         GameObject currentObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
         List<string> textList = new List<string>();
-        for (int i = 0; i < 2; i++)
-        {
-            textList.Add(currentObj.transform.GetChild(i).GetComponent<Text>().text);
-        }
+        textList.Add(currentObj.transform.GetChild(0).GetComponent<Text>().text);
 
         // get subtopicid from list based on element position of subtopic name
 
@@ -430,12 +407,11 @@ public class LevelManager : MonoBehaviour
     {
         Debug.Log("Called");
         string[] rawArray;
-        string uri = "http://localhost:8080/KidsTest/php/";
         string php = "GetSubtopicInfo.php";
         WWWForm form = new WWWForm();
         form.AddField("subtopicID", subtopicID);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(uri + php, form))
+        using (UnityWebRequest www = UnityWebRequest.Post(domainFolder + php, form))
         {
             yield return www.SendWebRequest();
 
